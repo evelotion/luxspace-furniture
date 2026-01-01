@@ -2,8 +2,8 @@
 
 > A full-stack e-commerce platform built with Node.js, Express, and PostgreSQL, featuring an immersive "Art Gallery" UI and AI-powered assistance.
 
-![LuxeSpace Preview](https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&q=80&w=1000)
-*(Note: Replace this image link with your actual project screenshot)*
+<!-- ![LuxeSpace Preview](https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&q=80&w=1000)
+*(Note: Replace this image link with your actual project screenshot)* -->
 
 ## ✨ Key Features
 
