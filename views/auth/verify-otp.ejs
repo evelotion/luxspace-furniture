@@ -1,0 +1,23 @@
+<%- include('../partials/header') %>
+<div class="flex items-center justify-center min-h-screen pt-32 pb-32 relative z-10">
+    <div class="glass p-10 rounded-2xl shadow-2xl w-full max-w-md mx-4 bg-white">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-serif text-gray-900 mb-2">Verify Account</h2>
+            <p class="text-gray-500 text-sm">We sent a code to your email. (Check Console Log)</p>
+        </div>
+
+        <% if (error_msg && error_msg.length > 0) { %>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4"><%= error_msg %></div>
+        <% } %>
+
+        <form action="/auth/verify-otp" method="POST" class="space-y-5">
+            <input type="hidden" name="email" value="<%= email %>">
+            <div>
+                <label class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold">Verification Code</label>
+                <input type="text" name="otp" required placeholder="Enter OTP" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-center tracking-[0.5em] font-bold text-xl">
+            </div>
+            <button type="submit" class="w-full bg-gray-900 text-white py-3 rounded-lg font-bold tracking-wide hover:bg-yellow-600 transition">VERIFY</button>
+        </form>
+    </div>
+</div>
+<%- include('../partials/footer') %>

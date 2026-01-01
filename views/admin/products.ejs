@@ -1,467 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Products | LuxeSpace</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        font-family: "Lato", sans-serif;
-      }
-      .luxury-bg {
-        background: radial-gradient(circle at 0% 0%, #1a1a1a 0%, #000000 100%);
-      }
-      .glass-card {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
-      }
-      .glass-input {
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: white;
-      }
-      .glass-input:focus {
-        background: rgba(0, 0, 0, 0.5);
-        border-color: #ca8a04; /* Yellow-600 */
-        outline: none;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Products Management | LuxeSpace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Lato', sans-serif; }
+    .luxury-bg { background: radial-gradient(circle at 0% 0%, #1a1a1a 0%, #000000 100%); }
+    .glass-card { 
+      background: rgba(255, 255, 255, 0.03); 
+      backdrop-filter: blur(20px); 
+      border: 1px solid rgba(255, 255, 255, 0.05); 
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36); 
+    }
+    .modal-glass {
+      background: rgba(20, 20, 20, 0.98);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      max-height: 90vh; /* Agar tidak kepotong di layar kecil */
+      display: flex;
+      flex-direction: column;
+    }
+    .upload-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-top: 10px; }
+    .upload-btn { 
+      width: 100%; aspect-ratio: 1/1; border: 2px dashed rgba(255,255,255,0.1); 
+      border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+      cursor: pointer; transition: all 0.3s; background: rgba(255,255,255,0.02); 
+    }
+    .image-card { position: relative; width: 100%; aspect-ratio: 1/1; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+    .image-card img { width: 100%; height: 100%; object-fit: cover; }
+    .is-cover { border: 2px solid #eab308; }
+    .delete-badge { position: absolute; top: 2px; right: 2px; background: #ef4444; color: white; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; cursor: pointer; }
+  </style>
+</head>
+<body class="luxury-bg text-gray-300 flex min-h-screen">
+  
+  <%- include('../partials/admin_sidebar', { page: 'products' }) %>
 
-      /* Custom Scrollbar for Gallery Preview */
-      .gallery-scroll::-webkit-scrollbar {
-        height: 6px;
-      }
-      .gallery-scroll::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
-      }
-      .gallery-scroll::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
-      }
-      .gallery-scroll::-webkit-scrollbar-thumb:hover {
-        background: rgba(234, 179, 8, 0.5);
-      }
-    </style>
-  </head>
-  <body class="luxury-bg text-gray-300 flex min-h-screen">
-    <%- include('../partials/admin_sidebar', { page: 'products' }) %>
+  <main class="flex-1 ml-72 p-10 relative">
+    <div class="fixed top-0 left-0 w-[500px] h-[500px] bg-yellow-600/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-    <main class="flex-1 ml-72 p-10 relative">
-      <div class="flex justify-between items-center mb-8 relative z-10">
-        <div>
-          <h1 class="text-3xl font-serif font-bold text-white">Inventory</h1>
-          <p class="text-xs text-gray-500 mt-1 uppercase tracking-widest">
-            Manage your catalog & galleries
-          </p>
-        </div>
+    <header class="flex justify-between items-center mb-12 relative z-10">
+      <div>
+        <h1 class="text-4xl font-serif font-bold text-white mb-2">Inventory</h1>
+        <p class="text-gray-400 font-light text-sm tracking-wide">Manage your premium collections.</p>
+      </div>
+      
+      <button onclick="openModal()" class="glass-card px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest text-yellow-500 hover:bg-yellow-500/10 transition flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+        Add Product
+      </button>
+    </header>
 
-        <button
-          onclick="openAddModal()"
-          class="group flex items-center gap-2 bg-yellow-600 hover:bg-yellow-500 text-white px-6 py-3 rounded-xl transition-all duration-300 shadow-lg shadow-yellow-900/20 hover:shadow-yellow-600/40"
-        >
-          <span class="bg-white/20 p-1 rounded-md">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-          </span>
-          <span class="text-xs font-bold uppercase tracking-widest"
-            >Add Product</span
-          >
-        </button>
+    <div class="glass-card rounded-2xl overflow-hidden relative z-10">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-white/5 text-gray-500 uppercase font-bold text-[10px] tracking-[0.2em]">
+          <tr>
+            <th class="p-6">Product</th>
+            <th class="p-6">Category</th>
+            <th class="p-6 text-right">Price</th>
+            <th class="p-6 text-center">Stock</th>
+            <th class="p-6 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          <% products.forEach(product => { %>
+          <tr class="hover:bg-white/5 transition duration-300 group">
+            <td class="p-6">
+              <div class="flex items-center gap-4">
+                <img class="w-10 h-10 rounded-lg object-cover bg-black border border-white/10" src="<%= product.image_url %>" />
+                <span class="font-medium text-white group-hover:text-yellow-500 transition"><%= product.name %></span>
+              </div>
+            </td>
+            <td class="p-6 text-gray-500 text-xs"><%= product.category %></td>
+            <td class="p-6 text-right font-mono text-yellow-500/80">IDR <%= new Intl.NumberFormat('id-ID').format(product.price) %></td>
+            <td class="p-6 text-center text-gray-400"><%= product.stock %></td>
+            <td class="p-6">
+              <div class="flex justify-end gap-2">
+                <button onclick="editProduct('<%= JSON.stringify(product) %>')" class="p-2 hover:bg-blue-500/10 rounded-lg text-blue-400 transition" title="Edit">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                </button>
+                <a href="/admin/products/delete/<%= product.id %>" onclick="return confirm('Hapus produk ini?')" class="p-2 hover:bg-red-500/10 rounded-lg text-red-400 transition" title="Delete">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </a>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <div id="productModal" class="fixed inset-0 bg-black/90 hidden z-[100] p-4 flex items-center justify-center backdrop-blur-sm">
+    <div class="modal-glass rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden transform transition-all">
+      <div class="px-6 py-4 border-b border-white/5 flex justify-between items-center">
+        <h3 class="text-lg font-serif font-bold text-white" id="modalTitle">Product Details</h3>
+        <button onclick="closeModal()" class="text-gray-500 hover:text-white transition-colors text-xl">&times;</button>
       </div>
 
-      <div class="glass-card rounded-3xl overflow-hidden relative z-10 w-full">
-        <table class="w-full text-left text-sm">
-          <thead
-            class="bg-white/5 text-gray-400 uppercase font-bold text-[10px] tracking-widest"
-          >
-            <tr>
-              <th class="p-6">Product</th>
-              <th class="p-6">Category</th>
-              <th class="p-6">Price</th>
-              <th class="p-6 text-center">Stock</th>
-              <th class="p-6 text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-white/5">
-            <% products.forEach(p => { %>
-            <tr class="hover:bg-white/5 transition duration-300 group">
-              <td class="p-6 flex items-center gap-4">
-                <div
-                  class="relative w-12 h-12 rounded-lg overflow-hidden ring-1 ring-white/10 group-hover:ring-yellow-500/50 transition"
-                >
-                  <img
-                    src="<%= p.image_url %>"
-                    class="w-full h-full object-cover"
-                  />
-                </div>
-                <span
-                  class="font-bold text-white group-hover:text-yellow-500 transition"
-                  ><%= p.name %></span
-                >
-              </td>
-              <td class="p-6 text-gray-500"><%= p.category %></td>
-              <td class="p-6 font-mono text-yellow-500">
-                IDR <%= new Intl.NumberFormat('id-ID').format(p.price) %>
-              </td>
-              <td class="p-6 text-center">
-                <span
-                  class="px-3 py-1 rounded-full text-[10px] font-bold border <%= p.stock < 5 ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-green-500/10 text-green-400 border-green-500/20' %>"
-                >
-                  <%= p.stock %>
-                </span>
-              </td>
-              <td class="p-6 text-right">
-                <div class="flex items-center justify-end gap-2">
-                  <button
-                    onclick="openEditModal(this)"
-                    data-id="<%= p.id %>"
-                    data-name="<%= p.name %>"
-                    data-category="<%= p.category %>"
-                    data-price="<%= p.price %>"
-                    data-stock="<%= p.stock %>"
-                    data-desc="<%= p.description %>"
-                    class="p-2 text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition"
-                    title="Edit"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                      />
-                    </svg>
-                  </button>
+      <div class="flex-1 overflow-y-auto p-6 scrollbar-hide">
+        <form id="productForm" action="/admin/products" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="id" id="productId">
+          
+          <div class="mb-4">
+            <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Name</label>
+            <input type="text" name="name" id="name" class="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl focus:border-yellow-500/50 text-white text-sm outline-none transition" required>
+          </div>
 
-                  <form
-                    action="/admin/product/delete/<%= p.id %>"
-                    method="POST"
-                    onsubmit="return confirm('Delete this product? This cannot be undone.')"
-                    class="inline-block"
-                  >
-                    <button
-                      class="p-2 text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition"
-                      title="Delete"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="1.5"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
-                  </form>
-                </div>
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
-    </main>
-
-    <div
-      id="productModal"
-      class="fixed inset-0 z-50 flex items-center justify-center hidden"
-    >
-      <div
-        class="absolute inset-0 bg-black/80 backdrop-blur-sm"
-        onclick="closeModal()"
-      ></div>
-
-      <div
-        class="glass-card p-8 rounded-3xl w-full max-w-2xl relative z-10 transform transition-all scale-100 shadow-2xl max-h-[90vh] overflow-y-auto"
-      >
-        <div
-          class="flex justify-between items-center mb-6 border-b border-white/10 pb-4"
-        >
-          <h2 id="modalTitle" class="text-xl font-serif font-bold text-white">
-            Add New Item
-          </h2>
-          <button onclick="closeModal()" class="text-gray-400 hover:text-white">
-            &times;
-          </button>
-        </div>
-
-        <form
-          id="productForm"
-          action="/admin/product"
-          method="POST"
-          enctype="multipart/form-data"
-          class="space-y-5"
-        >
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 gap-4 mb-4">
             <div>
-              <label
-                class="text-[10px] font-bold text-gray-500 uppercase tracking-widest"
-                >Name</label
-              >
-              <input
-                type="text"
-                id="inputName"
-                name="name"
-                required
-                class="glass-input w-full p-3 rounded-xl mt-2 transition focus:ring-1 focus:ring-yellow-500"
-              />
-            </div>
-            <div>
-              <label
-                class="text-[10px] font-bold text-gray-500 uppercase tracking-widest"
-                >Category</label
-              >
-              <select
-                id="inputCategory"
-                name="category"
-                class="glass-input w-full p-3 rounded-xl mt-2 transition"
-              >
-                <option value="Chair" class="text-black">Chair</option>
-                <option value="Sofa" class="text-black">Sofa</option>
-                <option value="Table" class="text-black">Table</option>
-                <option value="Lamp" class="text-black">Lamp</option>
+              <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Category</label>
+              <select name="category" id="category" class="w-full px-4 py-2.5 bg-[#111] border border-white/10 rounded-xl text-white text-sm outline-none">
+                <option value="Living Room">Living Room</option>
+                <option value="Bedroom">Bedroom</option>
+                <option value="Workspace">Workspace</option>
               </select>
             </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
             <div>
-              <label
-                class="text-[10px] font-bold text-gray-500 uppercase tracking-widest"
-                >Price (IDR)</label
-              >
-              <input
-                type="number"
-                id="inputPrice"
-                name="price"
-                required
-                class="glass-input w-full p-3 rounded-xl mt-2 transition"
-              />
-            </div>
-            <div>
-              <label
-                class="text-[10px] font-bold text-gray-500 uppercase tracking-widest"
-                >Stock</label
-              >
-              <input
-                type="number"
-                id="inputStock"
-                name="stock"
-                value="10"
-                class="glass-input w-full p-3 rounded-xl mt-2 transition"
-              />
+              <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Price</label>
+              <input type="number" name="price" id="price" class="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none" required>
             </div>
           </div>
 
-          <div class="p-4 bg-white/5 rounded-xl border border-white/5">
-            <label
-              class="text-[10px] font-bold text-yellow-500 uppercase tracking-widest mb-2 block"
-              >Main Thumbnail (Cover)</label
-            >
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-yellow-600 file:text-white hover:file:bg-yellow-500 transition cursor-pointer"
-            />
-            <p class="text-[9px] text-gray-500 mt-2 italic">
-              *Leave empty on edit to keep current thumbnail.
-            </p>
+          <div class="mb-4">
+            <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Description</label>
+            <textarea name="description" id="description" rows="2" class="w-full px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm outline-none"></textarea>
           </div>
 
-          <div class="p-4 bg-white/5 rounded-xl border border-white/5">
-            <label
-              class="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-2 block"
-              >Gallery Images (Multiple)</label
-            >
-            <input
-              type="file"
-              name="gallery"
-              accept="image/*"
-              multiple
-              class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition cursor-pointer"
-            />
-
-            <div
-              id="existingGallery"
-              class="flex gap-3 mt-4 overflow-x-auto pb-2 gallery-scroll hidden"
-            ></div>
+          <div class="mb-4">
+            <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Gallery & Cover</label>
+            <div class="upload-grid" id="previewContainer">
+              <label class="upload-btn" for="fileInput">
+                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+              </label>
+            </div>
+            <input type="file" id="fileInput" name="gallery" multiple class="hidden" onchange="handleFileSelect(event)">
+            <input type="hidden" id="coverIndex" name="cover_index" value="0">
           </div>
 
-          <div>
-            <label
-              class="text-[10px] font-bold text-gray-500 uppercase tracking-widest"
-              >Description</label
-            >
-            <textarea
-              id="inputDesc"
-              name="description"
-              rows="3"
-              class="glass-input w-full p-3 rounded-xl mt-2 transition"
-            ></textarea>
-          </div>
-
-          <div class="pt-4">
-            <button
-              type="submit"
-              id="submitBtn"
-              class="w-full bg-gradient-to-r from-yellow-600 to-yellow-700 hover:from-yellow-500 hover:to-yellow-600 text-white py-4 rounded-xl shadow-lg transition font-bold text-xs uppercase tracking-[0.2em] transform active:scale-95"
-            >
-              Publish Product
-            </button>
+          <div class="flex gap-3 pt-4 border-t border-white/5">
+            <button type="submit" class="flex-1 py-3 bg-yellow-500 text-black rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-yellow-400 transition">Save Changes</button>
           </div>
         </form>
       </div>
     </div>
+  </div>
 
-    <script>
-      const modal = document.getElementById("productModal");
-      const form = document.getElementById("productForm");
-      const modalTitle = document.getElementById("modalTitle");
-      const submitBtn = document.getElementById("submitBtn");
-      const existingGallery = document.getElementById("existingGallery");
+  <script>
+    let selectedFiles = [];
+    let coverIdx = 0;
 
-      // BUKA MODAL ADD
-      function openAddModal() {
-        form.reset();
-        form.action = "/admin/product";
-        modalTitle.innerText = "Add New Item";
-        submitBtn.innerText = "PUBLISH PRODUCT";
+    function handleFileSelect(e) {
+      selectedFiles = [...selectedFiles, ...Array.from(e.target.files)];
+      renderPreviews();
+    }
 
-        // Sembunyikan galeri lama karena ini tambah baru
-        existingGallery.classList.add("hidden");
-        existingGallery.innerHTML = "";
+    function renderPreviews() {
+      const container = document.getElementById('previewContainer');
+      const uploadBtn = container.querySelector('.upload-btn');
+      Array.from(container.children).forEach(c => !c.classList.contains('upload-btn') && c.remove());
+      
+      selectedFiles.forEach((file, i) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement('div');
+          div.className = `image-card ${i === coverIdx ? 'is-cover' : ''}`;
+          div.innerHTML = `<img src="${e.target.result}"><div class="delete-badge" onclick="removeImg(${i})">×</div><div onclick="setCover(${i})" class="absolute bottom-0 w-full bg-black/60 text-[8px] text-center py-1 cursor-pointer">${i === coverIdx ? 'COVER' : 'SET'}</div>`;
+          container.insertBefore(div, uploadBtn);
+        };
+        reader.readAsDataURL(file);
+      });
+      updateFiles();
+    }
 
-        modal.classList.remove("hidden");
-      }
+    function setCover(i) { coverIdx = i; document.getElementById('coverIndex').value = i; renderPreviews(); }
+    function removeImg(i) { selectedFiles.splice(i, 1); if(i === coverIdx) coverIdx=0; renderPreviews(); }
+    function updateFiles() {
+      const dt = new DataTransfer();
+      selectedFiles.forEach(f => dt.items.add(f));
+      document.getElementById('fileInput').files = dt.files;
+    }
 
-      // BUKA MODAL EDIT
-      async function openEditModal(btn) {
-        const id = btn.getAttribute("data-id");
-
-        // Isi Form Dasar dengan data dari tombol
-        document.getElementById("inputName").value =
-          btn.getAttribute("data-name");
-        document.getElementById("inputCategory").value =
-          btn.getAttribute("data-category");
-        document.getElementById("inputPrice").value =
-          btn.getAttribute("data-price");
-        document.getElementById("inputStock").value =
-          btn.getAttribute("data-stock");
-        document.getElementById("inputDesc").value =
-          btn.getAttribute("data-desc");
-
-        // Ganti action form ke URL Update
-        form.action = `/admin/product/update/${id}`;
-        modalTitle.innerText = "Edit Product";
-        submitBtn.innerText = "UPDATE & SAVE";
-
-        // Tampilkan loading di area galeri
-        existingGallery.innerHTML =
-          '<p class="text-xs text-gray-500 animate-pulse">Loading gallery photos...</p>';
-        existingGallery.classList.remove("hidden");
-
-        // Fetch Galeri dari Server
-        try {
-          const res = await fetch(`/admin/api/product-gallery/${id}`);
-          const images = await res.json();
-
-          existingGallery.innerHTML = ""; // Clear loading text
-
-          if (images.length === 0) {
-            existingGallery.innerHTML =
-              '<p class="text-[10px] text-gray-600 italic">No extra photos in gallery.</p>';
-          } else {
-            // Render setiap foto
-            images.forEach((img) => {
-              const div = document.createElement("div");
-              div.className =
-                "relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border border-gray-600 group shadow-sm";
-              div.innerHTML = `
-                            <img src="${img.image_url}" class="w-full h-full object-cover">
-                            <button type="button" onclick="deleteImage('${img.id}', this)" class="absolute inset-0 bg-red-900/80 backdrop-blur-sm text-white opacity-0 group-hover:opacity-100 flex items-center justify-center text-xs transition duration-200">
-                                <span class="flex flex-col items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                    <span class="text-[8px] uppercase font-bold tracking-wider">Delete</span>
-                                </span>
-                            </button>
-                        `;
-              existingGallery.appendChild(div);
-            });
-          }
-        } catch (e) {
-          console.error(e);
-          existingGallery.innerHTML =
-            '<p class="text-xs text-red-400">Error loading images.</p>';
-        }
-
-        modal.classList.remove("hidden");
-      }
-
-      // HAPUS GAMBAR GALERI
-      async function deleteImage(imgId, btnElement) {
-        if (!confirm("Are you sure you want to delete this photo permanently?"))
-          return;
-
-        // Ubah tampilan tombol jadi loading
-        const originalContent = btnElement.innerHTML;
-        btnElement.innerHTML =
-          '<span class="text-[8px] animate-pulse">Deleting...</span>';
-
-        try {
-          const res = await fetch(`/admin/product/delete-image/${imgId}`, {
-            method: "POST",
-          });
-          const data = await res.json();
-
-          if (data.success) {
-            // Animasi hilang pelan-pelan
-            const parentDiv = btnElement.parentElement;
-            parentDiv.style.transition = "all 0.3s";
-            parentDiv.style.transform = "scale(0)";
-            setTimeout(() => parentDiv.remove(), 300);
-          } else {
-            alert("Failed to delete image.");
-            btnElement.innerHTML = originalContent;
-          }
-        } catch (e) {
-          alert("Server error.");
-          btnElement.innerHTML = originalContent;
-        }
-      }
-
-      function closeModal() {
-        modal.classList.add("hidden");
-      }
-    </script>
-  </body>
+    const modal = document.getElementById('productModal');
+    function openModal() { modal.classList.remove('hidden'); modal.classList.add('flex'); }
+    function closeModal() { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+    
+    function editProduct(pStr) {
+      const p = JSON.parse(pStr);
+      openModal();
+      document.getElementById('modalTitle').innerText = 'Edit Product';
+      document.getElementById('productId').value = p.id;
+      document.getElementById('name').value = p.name;
+      document.getElementById('price').value = p.price;
+      document.getElementById('category').value = p.category;
+      document.getElementById('description').value = p.description;
+    }
+  </script>
+</body>
 </html>

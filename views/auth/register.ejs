@@ -1,50 +1,102 @@
 <%- include('../partials/header') %>
 
-<div class="flex items-center justify-center min-h-[80vh] relative z-10">
-    
-    <div class="glass p-10 rounded-2xl shadow-2xl w-full max-w-md mx-4 transform transition-all hover:scale-[1.01] duration-500">
-        
-        <div class="text-center mb-8">
-            <h2 class="text-3xl font-serif text-gray-900 mb-2">Join LuxeSpace</h2>
-            <p class="text-gray-500 text-sm">Start your premium journey today.</p>
-        </div>
-        
-        <form action="/auth/register" method="POST" class="space-y-5">
-            
-            <div>
-                <label class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold">Full Name</label>
-                <input type="text" name="full_name" required placeholder="John Doe"
-                       class="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:bg-white transition text-gray-900 placeholder-gray-400">
-            </div>
-
-            <div>
-                <label class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold">Email Address</label>
-                <input type="email" name="email" required placeholder="name@example.com"
-                       class="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:bg-white transition text-gray-900 placeholder-gray-400">
-            </div>
-
-            <div>
-                <label class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold">Password</label>
-                <input type="password" name="password" required placeholder="••••••••"
-                       class="w-full bg-white/50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:bg-white transition text-gray-900 placeholder-gray-400">
-            </div>
-            
-            <button type="submit" class="w-full bg-gray-900 text-white py-3 rounded-lg font-bold tracking-wide hover:bg-yellow-600 transition shadow-lg transform hover:-translate-y-1 active:translate-y-0 duration-200">
-                CREATE ACCOUNT
-            </button>
-
-        </form>
-        
-        <div class="mt-8 text-center pt-6 border-t border-gray-200/50">
-            <p class="text-sm text-gray-500">
-                Already a member? 
-                <a href="/auth/login" class="text-yellow-600 font-bold hover:text-yellow-700 hover:underline transition">
-                    Login here
-                </a>
-            </p>
-        </div>
-
+<div
+  class="flex items-center justify-center min-h-screen pt-32 pb-32 relative z-10"
+>
+  <div
+    class="glass p-10 rounded-2xl shadow-2xl w-full max-w-md mx-4 transform transition-all hover:scale-[1.01] duration-500 bg-white"
+  >
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-serif text-gray-900 mb-2">Join LuxeSpace</h2>
+      <p class="text-gray-500 text-sm">Start your premium journey today.</p>
     </div>
+
+    <% if (error_msg && error_msg.length > 0) { %>
+    <div
+      class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+      role="alert"
+    >
+      <span class="block sm:inline"><%= error_msg %></span>
+    </div>
+    <% } %>
+
+    <form action="/auth/register" method="POST" class="space-y-5">
+      <div>
+        <label
+          class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold"
+          >Full Name</label
+        >
+        <input
+          type="text"
+          name="full_name"
+          required
+          placeholder="John Doe"
+          class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:bg-white transition text-gray-900 placeholder-gray-400"
+        />
+      </div>
+
+      <div>
+        <label
+          class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold"
+          >Email Address</label
+        >
+        <input
+          type="email"
+          name="email"
+          required
+          placeholder="name@example.com"
+          class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:bg-white transition text-gray-900 placeholder-gray-400"
+        />
+      </div>
+
+      <div>
+        <label
+          class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold"
+          >Password</label
+        >
+        <input
+          type="password"
+          name="password"
+          required
+          placeholder="••••••••"
+          class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:bg-white transition text-gray-900 placeholder-gray-400"
+        />
+      </div>
+
+      <div>
+        <label
+          class="block text-xs uppercase tracking-wider text-gray-500 mb-2 font-bold"
+          >Confirm Password</label
+        >
+        <input
+          type="password"
+          name="confirm_password"
+          required
+          placeholder="••••••••"
+          class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:bg-white transition text-gray-900 placeholder-gray-400"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-gray-900 text-white py-3 rounded-lg font-bold tracking-wide hover:bg-yellow-600 transition shadow-lg transform hover:-translate-y-1 active:translate-y-0 duration-200"
+      >
+        CREATE ACCOUNT
+      </button>
+    </form>
+
+    <div class="mt-8 text-center pt-6 border-t border-gray-200/50">
+      <p class="text-sm text-gray-500">
+        Already a member?
+        <a
+          href="/auth/login"
+          class="text-yellow-600 font-bold hover:text-yellow-700 hover:underline transition"
+        >
+          Login here
+        </a>
+      </p>
+    </div>
+  </div>
 </div>
 
 <%- include('../partials/footer') %>

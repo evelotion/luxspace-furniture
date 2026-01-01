@@ -118,12 +118,16 @@
         <div
           class="relative overflow-hidden rounded-xl shadow-md group-hover:shadow-2xl transition duration-500 ease-out"
         >
+          <a
+            href="/product/<%= product.id %>"
+            class="absolute inset-0 z-10 cursor-pointer"
+          ></a>
           <div
             class="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition duration-300 translate-y-[-10px] group-hover:translate-y-0"
           >
             <button
               onclick="addToCartAnimated(this, '<%= product.id %>', '<%= product.image_url %>')"
-              class="bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-yellow-500 hover:text-white shadow-lg transition transform active:scale-90"
+              class="bg-white text-black w-10 h-10 rounded-full flex items-center justify-center hover:bg-yellow-500 hover:text-white shadow-lg transition transform active:scale-90 relative z-30"
             >
               <span class="text-xl leading-none mb-1">+</span>
             </button>
@@ -136,27 +140,20 @@
           />
 
           <div
-            class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-500"
+            class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"
           ></div>
 
           <div
-            class="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition duration-500"
-          >
-            <span
-              class="text-yellow-400 text-xs uppercase tracking-widest font-bold mb-1 block"
-            >
-              <%= product.category %>
-            </span>
-            <h3 class="text-2xl font-serif text-white leading-tight">
-              <%= product.name %>
-            </h3>
-          </div>
+            class="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none"
+          ></div>
         </div>
 
         <div
           class="mt-4 flex justify-between items-center px-2 group-hover:opacity-50 transition duration-300"
         >
-          <h4 class="text-gray-900 font-serif text-lg"><%= product.name %></h4>
+          <h4 class="text-gray-900 font-serif text-lg">
+            <a href="/product/<%= product.id %>"><%= product.name %></a>
+          </h4>
           <span class="text-sm font-bold text-gray-500">
             <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency:
             'IDR', minimumFractionDigits: 0 }).format(product.price) %>
@@ -180,24 +177,6 @@
   ></div>
 
   <div class="flex whitespace-nowrap animate-marquee items-center">
-    <span
-      class="text-2xl md:text-3xl font-serif text-gray-900 px-8 flex items-center tracking-widest opacity-80"
-    >
-      TIMELESS ELEGANCE
-      <span class="text-xs text-gray-300 mx-6">◇</span> SUSTAINABLE MATERIALS
-      <span class="text-xs text-gray-300 mx-6">◇</span> HANDCRAFTED PERFECTION
-      <span class="text-xs text-gray-300 mx-6">◇</span> MODERN MINIMALISM
-      <span class="text-xs text-gray-300 mx-6">◇</span>
-    </span>
-    <span
-      class="text-2xl md:text-3xl font-serif text-gray-900 px-8 flex items-center tracking-widest opacity-80"
-    >
-      TIMELESS ELEGANCE
-      <span class="text-xs text-gray-300 mx-6">◇</span> SUSTAINABLE MATERIALS
-      <span class="text-xs text-gray-300 mx-6">◇</span> HANDCRAFTED PERFECTION
-      <span class="text-xs text-gray-300 mx-6">◇</span> MODERN MINIMALISM
-      <span class="text-xs text-gray-300 mx-6">◇</span>
-    </span>
     <span
       class="text-2xl md:text-3xl font-serif text-gray-900 px-8 flex items-center tracking-widest opacity-80"
     >
