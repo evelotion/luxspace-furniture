@@ -50,8 +50,8 @@ app.use("/orders", orderRoutes);
 app.use("/api/chat", chatRoutes);
 app.use('/profile', profileRoutes);
 
-const { ensureAdmin } = require("./middleware/authMiddleware");
-app.use("/admin", ensureAdmin, adminRoutes);
+const { isAdmin } = require("./middleware/authMiddleware");
+app.use("/admin", isAdmin, adminRoutes);
 
 app.use((req, res, next) => {
   res.status(404).render("404");

@@ -74,24 +74,31 @@ router.post(
 );
 
 
-router.post(
-  "/products/edit",
-  isAdmin,
-  upload.fields([{ name: "gallery", maxCount: 5 }]),
-  async (req, res) => {
-    const { id, name, category, price, stock, description } = req.body;
+router.post("/products/edit", isAdmin, upload.fields([{ name: "gallery", maxCount: 5 }]), async (req, res) => {
+    const { id, name, category, price, stock, description, cover_index } = req.body;
+    
     try {
-      await db.query(
-        "UPDATE products SET name=$1, category=$2, price=$3, stock=$4, description=$5 WHERE id=$6",
-        [name, category, price, stock, description, id]
-      );
-      res.redirect("/admin/products");
-    } catch (err) {
-      res.status(500).send(err.message);
-    }
-  }
-);
+        const oldProduct = await db.query("SELECT image_url, gallery FROM products WHERE id = $1", [id]);
+        
+        let image_url = oldProduct.rows[0].image_url;
+        let gallery = oldProduct.rows[0].gallery;
 
+        if (req.files && req.files["gallery"]) {
+            const newGallery = req.files["gallery"].map((f) => `/uploads/${f.filename}`);
+            gallery = JSON.stringify(newGallery);
+            image_url = newGallery[cover_index || 0] || newGallery[0];
+        }
+
+        await db.query(
+            "UPDATE products SET name=$1, category=$2, price=$3, stock=$4, description=$5, image_url=$6, gallery=$7 WHERE id=$8",
+            [name, category, price, stock, description, image_url, gallery, id]
+        );
+        
+        res.redirect("/admin/products");
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
 
 router.get("/products/delete/:id", isAdmin, async (req, res) => {
   try {
@@ -102,4 +109,29 @@ router.get("/products/delete/:id", isAdmin, async (req, res) => {
   }
 });
 
+router.get("/orders", isAdmin, async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT orders.*, users.full_name 
+      FROM orders 
+      JOIN users ON orders.user_id = users.id 
+      ORDER BY orders.created_at DESC
+    `);
+    
+    res.render("admin/orders", { orders: result.rows });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+router.get("/users", isAdmin, async (req, res) => {
+  try {
+    const result = await db.query("SELECT id, full_name, email, role, created_at FROM users ORDER BY created_at DESC");
+    
+    res.render("admin/users", { users: result.rows });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 module.exports = router;

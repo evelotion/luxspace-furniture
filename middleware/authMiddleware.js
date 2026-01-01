@@ -6,7 +6,7 @@ const ensureAuthenticated = (req, res, next) => {
     res.redirect('/auth/login');
 };
 
-const ensureAdmin = (req, res, next) => {
+const isAdmin = (req, res, next) => {
     if (req.session.user && req.session.user.role === 'admin') {
         return next();
     }
@@ -14,4 +14,4 @@ const ensureAdmin = (req, res, next) => {
     res.redirect('/');
 };
 
-module.exports = { ensureAuthenticated, ensureAdmin };
+module.exports = { ensureAuthenticated, isAdmin };
