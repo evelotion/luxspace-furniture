@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation | LuxeSpace Furniture</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Lato', sans-serif; background-color: #0a0a0a; color: #d1d1d1; }
+        .serif { font-family: 'Playfair Display', serif; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .accent-text { color: #eab308; } /* Yellow-500 */
+        pre { background: #111; padding: 1rem; border-radius: 0.5rem; border: 1px solid #333; overflow-x: auto; color: #86efac; }
+        code { font-family: 'Courier New', Courier, monospace; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <header class="max-w-5xl mx-auto mb-16 text-center">
+        <h1 class="text-6xl serif text-white mb-4">LuxeSpace <span class="accent-text">.</span></h1>
+        <p class="text-gray-400 tracking-widest uppercase text-xs font-light">Full-Stack Modern Furniture E-Commerce Documentation</p>
+    </header>
+
+    <main class="max-w-5xl mx-auto space-y-20">
+        
+        <section>
+            <h2 class="text-2xl serif text-white mb-6 border-b border-white/10 pb-2">1. Gambaran Umum</h2>
+            <p class="leading-relaxed">
+                LuxeSpace adalah platform e-commerce furniture premium yang menggabungkan desain minimalis "Art Gallery" dengan teknologi AI. 
+                Dibangun menggunakan arsitektur <strong>Node.js</strong> dan <strong>PostgreSQL</strong> untuk performa yang solid dan skalabel.
+            </p>
+        </section>
+
+        <section class="grid md:grid-cols-2 gap-8">
+            <div class="glass p-8 rounded-2xl">
+                <h3 class="text-xl serif text-white mb-4">Core Tech Stack</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><span class="accent-text">⚡ Backend:</span> Node.js & Express.js</li>
+                    <li><span class="accent-text">🗄️ Database:</span> PostgreSQL with ACID Transactions</li>
+                    <li><span class="accent-text">🎨 Frontend:</span> EJS, Tailwind CSS, JavaScript (AJAX)</li>
+                    <li><span class="accent-text">🧠 AI Engine:</span> Google Gemini AI (Google Generative AI)</li>
+                </ul>
+            </div>
+            <div class="glass p-8 rounded-2xl">
+                <h3 class="text-xl serif text-white mb-4">Key Libraries</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><strong>BcryptJS:</strong> Keamanan hashing password</li>
+                    <li><strong>Multer:</strong> Manajemen upload file gambar produk</li>
+                    <li><strong>Express-Session:</strong> Manajemen sesi login & autentikasi</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl serif text-white mb-6 border-b border-white/10 pb-2">2. Arsitektur Routing</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="text-gray-500 uppercase text-[10px] tracking-widest border-b border-white/10">
+                            <th class="py-4">Prefix</th>
+                            <th class="py-4">Fungsi Utama</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        <tr><td class="py-4 font-mono">/</td><td>Halaman utama, katalog, dan detail produk</td></tr>
+                        <tr><td class="py-4 font-mono">/auth</td><td>Registrasi, Login, OTP Verification, & Reset Password</td></tr>
+                        <tr><td class="py-4 font-mono">/admin</td><td>Dashboard internal, CRUD Produk, & Order Management (Admin Only)</td></tr>
+                        <tr><td class="py-4 font-mono">/api/chat</td><td>Endpoint AI Assistant (LuxeBot)</td></tr>
+                        <tr><td class="py-4 font-mono">/profile</td><td>Manajemen data diri pelanggan</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl serif text-white mb-6 border-b border-white/10 pb-2">3. Fitur Unggulan</h2>
+            <div class="grid md:grid-cols-3 gap-6 text-sm">
+                <div class="glass p-6 rounded-xl">
+                    <h4 class="font-bold text-white mb-2 italic">LuxeBot AI</h4>
+                    <p>Rekomendasi furniture cerdas berbasis database produk secara real-time menggunakan Gemini AI.</p>
+                </div>
+                <div class="glass p-6 rounded-xl">
+                    <h4 class="font-bold text-white mb-2 italic">Role-Based Access</h4>
+                    <p>Sistem keamanan yang memisahkan hak akses Admin dan Customer via Middleware.</p>
+                </div>
+                <div class="glass p-6 rounded-xl">
+                    <h4 class="font-bold text-white mb-2 italic">Cinematic UI</h4>
+                    <p>Tampilan modern dengan Glassmorphism dan grid desain layaknya galeri seni.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl serif text-white mb-6 border-b border-white/10 pb-2">4. Cara Instalasi</h2>
+            <div class="space-y-4">
+                <p>1. Install seluruh dependency:</p>
+                <pre><code>npm install</code></pre>
+                <p>2. Konfigurasi file <code>.env</code> dengan kredensial database lo:</p>
+                <pre><code>DB_USER=postgres
+DB_PASSWORD=yourpassword
+DB_NAME=luxspace_db
+GEMINI_API_KEY=your_api_key</code></pre>
+                <p>3. Jalankan server:</p>
+                <pre><code>npm start</code></pre>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-20 border-t border-white/5 py-12 text-center text-xs text-gray-600">
+       <p class="text-xs text-gray-500 font-light tracking-wide">
+                &copy; <span id="year"></span> LuxeSpace. Designed & Developed by Indra. All Rights Reserved.
+            </p>
+    </footer>
+
+</body>
+</html>
