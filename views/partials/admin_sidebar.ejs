@@ -1,0 +1,126 @@
+<aside class="w-72 fixed h-full z-50 transition-all duration-300">
+  <div
+    class="h-full bg-white/10 backdrop-blur-xl border-r border-white/20 flex flex-col shadow-2xl relative overflow-hidden"
+  >
+    <div
+      class="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"
+    ></div>
+
+    <div
+      class="h-24 flex items-center justify-center border-b border-white/10 relative z-10"
+    >
+      <a
+        href="/"
+        class="text-3xl font-serif font-bold tracking-widest text-white drop-shadow-md"
+      >
+        LUXE<span class="text-yellow-400">.</span>
+      </a>
+    </div>
+
+    <nav class="flex-grow py-8 px-4 space-y-3 relative z-10 overflow-y-auto">
+      <a
+        href="/admin"
+        class="flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group <%= page === 'dashboard' ? 'bg-gradient-to-r from-yellow-500/80 to-yellow-600/80 text-white shadow-lg shadow-yellow-900/20 ring-1 ring-white/30' : 'text-gray-300 hover:bg-white/5 hover:text-white' %>"
+      >
+        <svg
+          class="w-6 h-6 <%= page === 'dashboard' ? 'text-white' : 'text-gray-400 group-hover:text-yellow-400' %> transition-colors"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+          ></path>
+        </svg>
+        <span class="text-sm font-bold tracking-wide">Overview</span>
+      </a>
+
+      <a
+        href="/admin/products"
+        class="flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group <%= page === 'products' ? 'bg-gradient-to-r from-yellow-500/80 to-yellow-600/80 text-white shadow-lg shadow-yellow-900/20 ring-1 ring-white/30' : 'text-gray-300 hover:bg-white/5 hover:text-white' %>"
+      >
+        <svg
+          class="w-6 h-6 <%= page === 'products' ? 'text-white' : 'text-gray-400 group-hover:text-yellow-400' %> transition-colors"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+          ></path>
+        </svg>
+        <span class="text-sm font-bold tracking-wide">Products</span>
+      </a>
+
+      <a
+        href="/admin/orders"
+        class="flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group <%= page === 'orders' ? 'bg-gradient-to-r from-yellow-500/80 to-yellow-600/80 text-white shadow-lg shadow-yellow-900/20 ring-1 ring-white/30' : 'text-gray-300 hover:bg-white/5 hover:text-white' %>"
+      >
+        <svg
+          class="w-6 h-6 <%= page === 'orders' ? 'text-white' : 'text-gray-400 group-hover:text-yellow-400' %> transition-colors"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+          ></path>
+        </svg>
+        <span class="text-sm font-bold tracking-wide">Orders</span>
+      </a>
+
+      <a
+        href="/admin/users"
+        class="flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group <%= page === 'users' ? 'bg-gradient-to-r from-yellow-500/80 to-yellow-600/80 text-white shadow-lg shadow-yellow-900/20 ring-1 ring-white/30' : 'text-gray-300 hover:bg-white/5 hover:text-white' %>"
+      >
+        <svg
+          class="w-6 h-6 <%= page === 'users' ? 'text-white' : 'text-gray-400 group-hover:text-yellow-400' %> transition-colors"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+          ></path>
+        </svg>
+        <span class="text-sm font-bold tracking-wide">Customers</span>
+      </a>
+    </nav>
+
+    <div class="p-6 border-t border-white/10 relative z-10">
+      <div
+        class="flex items-center gap-4 mb-6 px-2 bg-white/5 p-3 rounded-xl border border-white/5"
+      >
+        <div
+          class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-white font-bold shadow-lg"
+        >
+          A
+        </div>
+        <div>
+          <p class="text-sm font-bold text-white">Administrator</p>
+          <p class="text-[10px] text-gray-400 uppercase tracking-widest">
+            Super User
+          </p>
+        </div>
+      </div>
+      <a
+        href="/auth/logout"
+        class="block w-full bg-red-500/20 hover:bg-red-500/40 border border-red-500/30 text-red-200 hover:text-white text-center py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition backdrop-blur-sm"
+      >
+        Sign Out
+      </a>
+    </div>
+  </div>
+</aside>

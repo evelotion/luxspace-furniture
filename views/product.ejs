@@ -1,0 +1,101 @@
+<%- include('partials/header') %>
+
+<div class="pt-32 pb-20 bg-[#FDFBF7] min-h-screen">
+    <div class="container mx-auto px-6 max-w-6xl">
+        
+        <div class="text-xs text-gray-400 uppercase tracking-widest mb-10">
+            <a href="/" class="hover:text-yellow-600 transition">Home</a> / 
+            <span class="text-gray-600 font-bold"><%= product.name %></span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            
+            <div class="space-y-6">
+                <div class="aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl relative group bg-white">
+                    <img id="mainImage" src="<%= product.image_url %>" class="w-full h-full object-cover transition duration-700 group-hover:scale-105">
+                </div>
+
+                <% if(gallery && gallery.length > 0) { %>
+                <div class="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                    <button onclick="changeImage('<%= product.image_url %>')" class="w-20 h-20 rounded-xl overflow-hidden border-2 border-yellow-600 flex-shrink-0 focus:outline-none transition opacity-100 hover:opacity-80">
+                        <img src="<%= product.image_url %>" class="w-full h-full object-cover">
+                    </button>
+                    <% gallery.forEach(img => { %>
+                    <button onclick="changeImage('<%= img.image_url %>')" class="w-20 h-20 rounded-xl overflow-hidden border border-gray-200 flex-shrink-0 focus:outline-none transition hover:border-yellow-600">
+                        <img src="<%= img.image_url %>" class="w-full h-full object-cover">
+                    </button>
+                    <% }) %>
+                </div>
+                <% } %>
+            </div>
+
+            <div class="flex flex-col justify-center">
+                <span class="text-yellow-600 font-bold tracking-widest text-xs uppercase mb-4"><%= product.category %> Collection</span>
+                <h1 class="text-5xl font-serif text-gray-900 mb-6 leading-tight"><%= product.name %></h1>
+                
+                <div class="text-3xl text-gray-900 font-serif mb-8 border-b border-gray-200 pb-8">
+                    IDR <%= new Intl.NumberFormat('id-ID').format(product.price) %>
+                </div>
+
+                <p class="text-gray-500 leading-relaxed mb-10 font-light">
+                    <%= product.description || "Experience the epitome of luxury with this handcrafted piece. Designed to bring elegance and comfort to your sanctuary." %>
+                </p>
+
+                <div class="flex items-center gap-6 mb-12">
+                    <div class="flex items-center border border-gray-300 rounded-full px-4 py-3">
+                        <button onclick="adjustQty(-1)" class="text-gray-500 hover:text-black px-2">-</button>
+                        <input type="number" id="qtyInput" value="1" min="1" max="<%= product.stock %>" class="w-12 text-center bg-transparent border-none focus:ring-0 text-sm font-bold" readonly>
+                        <button onclick="adjustQty(1)" class="text-gray-500 hover:text-black px-2">+</button>
+                    </div>
+                    <button onclick="addToCartDetail('<%= product.id %>')" class="flex-1 bg-gray-900 text-white py-4 rounded-full uppercase tracking-[0.2em] text-xs font-bold hover:bg-yellow-600 transition shadow-xl hover:shadow-yellow-600/30">
+                        Add to Cart
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-3 text-xs uppercase tracking-widest text-gray-400">
+                    <span class="w-2 h-2 rounded-full <%= product.stock > 0 ? 'bg-green-500' : 'bg-red-500' %>"></span>
+                    <%= product.stock > 0 ? `${product.stock} units available` : 'Out of Stock' %>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const maxStock = parseInt('<%= product.stock %>');
+
+    function changeImage(src) {
+        document.getElementById('mainImage').src = src;
+    }
+
+    function adjustQty(change) {
+        const input = document.getElementById('qtyInput');
+        let val = parseInt(input.value) + change;
+        
+        if (val >= 1 && val <= maxStock) {
+            input.value = val;
+        }
+    }
+
+    async function addToCartDetail(id) {
+        const qty = document.getElementById('qtyInput').value;
+        try {
+            const res = await fetch("/cart/api/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ product_id: id, quantity: qty }),
+            });
+            const result = await res.json();
+            if (!result.success) {
+                window.location.href = "/auth/login";
+            } else {
+                updateCartData(); 
+                alert("Added to bag successfully!");
+            }
+        } catch(e) { console.error(e); }
+    }
+</script>
+
+<%- include('partials/footer') %>

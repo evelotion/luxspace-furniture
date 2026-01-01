@@ -1,0 +1,132 @@
+<%- include('partials/header') %>
+
+<div class="min-h-screen pt-32 pb-20 relative z-10">
+  <div class="container mx-auto px-6 max-w-6xl">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <span
+        class="text-yellow-600 tracking-[0.2em] text-xs font-bold uppercase mb-2 block"
+        >Your Selection</span
+      >
+      <h1 class="text-5xl font-serif text-gray-900">Shopping Bag</h1>
+    </div>
+
+    <% if(cartItems.length === 0) { %>
+    <div class="text-center py-20" data-aos="fade-up">
+      <div class="text-6xl text-gray-300 mb-6 font-serif italic">Empty.</div>
+      <p class="text-gray-500 mb-8 tracking-wide">
+        You haven't selected any masterpieces yet.
+      </p>
+      <a
+        href="/"
+        class="inline-block border-b border-gray-900 pb-1 text-sm uppercase tracking-widest hover:text-yellow-600 hover:border-yellow-600 transition"
+      >
+        Browse Collection
+      </a>
+    </div>
+    <% } else { %>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div
+        class="lg:col-span-8 space-y-8"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
+        <% cartItems.forEach(item => { %>
+        <div
+          class="flex flex-col sm:flex-row items-center gap-6 p-6 bg-white border border-gray-100 shadow-sm rounded-xl hover:shadow-md transition duration-300 relative group"
+        >
+          <div
+            class="w-full sm:w-32 h-32 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100"
+          >
+            <img
+              src="<%= item.image_url %>"
+              class="w-full h-full object-cover transform group-hover:scale-110 transition duration-700"
+            />
+          </div>
+
+          <div class="flex-grow text-center sm:text-left">
+            <h3 class="text-xl font-serif text-gray-900 mb-1">
+              <%= item.name %>
+            </h3>
+            <p class="text-xs text-gray-400 uppercase tracking-widest mb-4">
+              Premium Furniture
+            </p>
+            <div class="text-sm font-medium text-gray-600">
+              IDR <%= new Intl.NumberFormat('id-ID').format(item.price) %>
+            </div>
+          </div>
+
+          <div class="flex flex-col items-center sm:items-end gap-4">
+            <span
+              class="font-mono text-lg bg-gray-50 px-4 py-1 rounded-full border border-gray-200"
+            >
+              x<%= item.quantity %>
+            </span>
+            <span class="font-serif text-lg font-bold text-gray-900">
+              IDR <%= new Intl.NumberFormat('id-ID').format(item.subtotal) %>
+            </span>
+            <form action="/cart/delete/<%= item.id %>" method="POST">
+              <button
+                type="submit"
+                class="text-[10px] uppercase tracking-widest text-red-400 hover:text-red-600 border-b border-transparent hover:border-red-600 transition"
+              >
+                Remove
+              </button>
+            </form>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+
+      <div class="lg:col-span-4" data-aos="fade-up" data-aos-delay="200">
+        <div
+          class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 sticky top-32"
+        >
+          <h2 class="text-2xl font-serif text-gray-900 mb-8">Summary</h2>
+
+          <div class="space-y-4 mb-8 text-sm">
+            <div class="flex justify-between text-gray-500">
+              <span>Subtotal</span>
+              <span
+                >IDR <%= new Intl.NumberFormat('id-ID').format(grandTotal || 0)
+                %></span
+              >
+            </div>
+            <div class="flex justify-between text-gray-500">
+              <span>Shipping</span>
+              <span class="text-green-600">Free Shipping</span>
+            </div>
+            <div
+              class="border-t border-dashed border-gray-200 pt-4 flex justify-between items-center"
+            >
+              <span
+                class="font-bold text-gray-900 uppercase tracking-widest text-xs"
+                >Total</span
+              >
+              <span class="font-serif text-2xl font-bold text-gray-900">
+                IDR <%= new Intl.NumberFormat('id-ID').format(grandTotal || 0)
+                %>
+              </span>
+            </div>
+          </div>
+
+          <a
+            href="/checkout"
+            class="block w-full bg-gray-900 text-white text-center py-4 rounded-lg text-xs uppercase tracking-[0.2em] font-bold hover:bg-yellow-600 transition shadow-lg hover:shadow-yellow-600/20"
+          >
+            Checkout Now
+          </a>
+
+          <div class="mt-6 flex justify-center gap-4 text-gray-300">
+            <div class="w-8 h-5 bg-gray-100 rounded"></div>
+            <div class="w-8 h-5 bg-gray-100 rounded"></div>
+            <div class="w-8 h-5 bg-gray-100 rounded"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
