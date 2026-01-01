@@ -40,7 +40,7 @@
 
 1. **Clone the repository**
    ```bash
-   git clone [https://github.com/USERNAME_LO/luxspace-furniture.git](https://github.com/USERNAME_LO/luxspace-furniture.git)
+   git clone [https://github.com/evelotion/luxspace-furniture.git](https://github.com/evelotion/luxspace-furniture.git)
    cd luxspace-
    ```
 
