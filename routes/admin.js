@@ -3,16 +3,25 @@ const router = express.Router();
 const db = require("../config/db");
 const { isAdmin } = require("../middleware/authMiddleware");
 const multer = require("multer");
-const path = require("path");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+require("dotenv").config();
 
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "public/uploads/"),
-  filename: (req, file, cb) =>
-    cb(null, Date.now() + path.extname(file.originalname)),
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-const upload = multer({ storage });
 
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "luxspace-furniture",
+    allowed_formats: ["jpg", "png", "jpeg", "webp"],
+  },
+});
+
+const upload = multer({ storage: storage });
 
 router.get("/", isAdmin, async (req, res) => {
   try {
@@ -27,20 +36,20 @@ router.get("/", isAdmin, async (req, res) => {
       },
     });
   } catch (err) {
+    console.error(err);
     res.status(500).send("Server Error");
   }
 });
-
 
 router.get("/products", isAdmin, async (req, res) => {
   try {
     const result = await db.query("SELECT * FROM products ORDER BY id DESC");
     res.render("admin/products", { products: result.rows });
   } catch (err) {
+    console.error(err);
     res.status(500).send("Server Error");
   }
 });
-
 
 router.post(
   "/products",
@@ -48,9 +57,11 @@ router.post(
   upload.fields([{ name: "gallery", maxCount: 5 }]),
   async (req, res) => {
     const { name, category, price, stock, description, cover_index } = req.body;
+
     const gallery = req.files["gallery"]
-      ? req.files["gallery"].map((f) => `/uploads/${f.filename}`)
+      ? req.files["gallery"].map((f) => f.path)
       : [];
+
     const image_url = gallery[cover_index || 0] || "";
 
     try {
@@ -68,43 +79,66 @@ router.post(
       );
       res.redirect("/admin/products");
     } catch (err) {
-      res.status(500).send(err.message);
+      console.error(err);
+      res.status(500).send("Gagal menyimpan produk: " + err.message);
     }
   }
 );
 
+router.post(
+  "/products/edit",
+  isAdmin,
+  upload.fields([{ name: "gallery", maxCount: 10 }]),
+  async (req, res) => {
+    const { id, name, category, price, stock, description, cover_index } =
+      req.body;
 
-router.post("/products/edit", isAdmin, upload.fields([{ name: "gallery", maxCount: 5 }]), async (req, res) => {
-    const { id, name, category, price, stock, description, cover_index } = req.body;
-    
     try {
-        const oldProduct = await db.query("SELECT image_url, gallery FROM products WHERE id = $1", [id]);
-        
-        let image_url = oldProduct.rows[0].image_url;
-        let gallery = oldProduct.rows[0].gallery;
+      let existingGallery = [];
+      if (req.body.existing_gallery) {
+        existingGallery = Array.isArray(req.body.existing_gallery)
+          ? req.body.existing_gallery
+          : [req.body.existing_gallery];
+      }
 
-        if (req.files && req.files["gallery"]) {
-            const newGallery = req.files["gallery"].map((f) => `/uploads/${f.filename}`);
-            gallery = JSON.stringify(newGallery);
-            image_url = newGallery[cover_index || 0] || newGallery[0];
-        }
+      let newGallery = [];
+      if (req.files && req.files["gallery"]) {
+        newGallery = req.files["gallery"].map((f) => f.path);
+      }
 
-        await db.query(
-            "UPDATE products SET name=$1, category=$2, price=$3, stock=$4, description=$5, image_url=$6, gallery=$7 WHERE id=$8",
-            [name, category, price, stock, description, image_url, gallery, id]
-        );
-        
-        res.redirect("/admin/products");
+      const finalGallery = [...existingGallery, ...newGallery];
+
+      const safeCoverIndex = parseInt(cover_index) || 0;
+      const image_url = finalGallery[safeCoverIndex] || finalGallery[0] || "";
+
+      await db.query(
+        "UPDATE products SET name=$1, category=$2, price=$3, stock=$4, description=$5, image_url=$6, gallery=$7 WHERE id=$8",
+        [
+          name,
+          category,
+          price,
+          stock,
+          description,
+          image_url,
+          JSON.stringify(finalGallery),
+          id,
+        ]
+      );
+
+      res.redirect("/admin/products");
     } catch (err) {
-        res.status(500).send(err.message);
+      console.error(err);
+      res.status(500).send("Gagal update produk: " + err.message);
     }
-});
+  }
+);
 
 router.get("/products/delete/:id", isAdmin, async (req, res) => {
   try {
     await db.query("DELETE FROM products WHERE id = $1", [req.params.id]);
     res.redirect("/admin/products");
   } catch (err) {
+    console.error(err);
     res.status(500).send("Server Error");
   }
 });
@@ -117,21 +151,25 @@ router.get("/orders", isAdmin, async (req, res) => {
       JOIN users ON orders.user_id = users.id 
       ORDER BY orders.created_at DESC
     `);
-    
+
     res.render("admin/orders", { orders: result.rows });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
+
 router.get("/users", isAdmin, async (req, res) => {
   try {
-    const result = await db.query("SELECT id, full_name, email, role, created_at FROM users ORDER BY created_at DESC");
-    
+    const result = await db.query(
+      "SELECT id, full_name, email, role, created_at FROM users ORDER BY created_at DESC"
+    );
+
     res.render("admin/users", { users: result.rows });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
+
 module.exports = router;
