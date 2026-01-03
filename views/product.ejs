@@ -13,11 +13,18 @@
                 </div>
                 <div class="grid grid-cols-4 gap-4">
                     <% if (product.gallery) { %>
-                        <% JSON.parse(product.gallery).forEach(img => { %>
-                            <div class="aspect-square rounded-xl overflow-hidden cursor-pointer border border-white/10 hover:border-yellow-500 transition" onclick="document.getElementById('mainImage').src='<%= img %>'">
-                                <img src="<%= img %>" class="w-full h-full object-cover">
-                            </div>
-                        <% }) %>
+                        <% 
+       // Handle kalau gallery masih string (legacy) atau sudah array (JSONB)
+       let galleryData = product.gallery;
+       if (typeof galleryData === 'string') {
+           try { galleryData = JSON.parse(galleryData); } catch(e) { galleryData = []; }
+       }
+    %>
+    <% galleryData.forEach(img => { %>
+        <div class="aspect-square rounded-xl overflow-hidden cursor-pointer border border-white/10 hover:border-yellow-500 transition" onclick="document.getElementById('mainImage').src='<%= img %>'">
+            <img src="<%= img %>" class="w-full h-full object-cover">
+        </div>
+    <% }) %>
                     <% } %>
                 </div>
             </div>
