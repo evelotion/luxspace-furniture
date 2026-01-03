@@ -9,8 +9,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// 🔥🔥🔥 BAGIAN PENTING YANG DIUBAH 🔥🔥🔥
+// 1. Set Folder Views pake process.cwd() (Biar Vercel gak nyasar)
+app.set("views", path.join(process.cwd(), "views")); 
 app.set("view engine", "ejs");
-app.use(express.static(path.join(__dirname, "public")));
+
+// 2. Set Folder Public juga pake process.cwd()
+app.use(express.static(path.join(process.cwd(), "public"))); 
+// 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
