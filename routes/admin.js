@@ -8,27 +8,25 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const path = require("path");
 require("dotenv").config();
 
-// 1. Config Cloudinary
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// 2. Setup Storage ke Cloudinary
+
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "luxspace-furniture", // Folder di Cloudinary
+    folder: "luxspace-furniture", 
     allowed_formats: ["jpg", "png", "jpeg", "webp"],
   },
 });
 
 const upload = multer({ storage: storage });
 
-// --- ROUTES ---
 
-// Dashboard
 router.get("/", isAdmin, async (req, res) => {
   try {
     const products = await db.query("SELECT COUNT(*) FROM products");
@@ -46,7 +44,7 @@ router.get("/", isAdmin, async (req, res) => {
   }
 });
 
-// List Products
+
 router.get("/products", isAdmin, async (req, res) => {
   try {
     const result = await db.query("SELECT * FROM products ORDER BY id DESC");
@@ -56,7 +54,7 @@ router.get("/products", isAdmin, async (req, res) => {
   }
 });
 
-// CREATE PRODUCT (Cloudinary)
+
 router.post(
   "/products",
   isAdmin,
@@ -64,7 +62,7 @@ router.post(
   async (req, res) => {
     const { name, category, price, stock, description, cover_index } = req.body;
     
-    // Ambil URL dari Cloudinary
+
     const gallery = req.files["gallery"]
       ? req.files["gallery"].map((f) => f.path) 
       : [];
@@ -92,12 +90,12 @@ router.post(
   }
 );
 
-// EDIT PRODUCT (Cloudinary + Append Logic)
+
 router.post("/products/edit", isAdmin, upload.fields([{ name: "gallery", maxCount: 10 }]), async (req, res) => {
     const { id, name, category, price, stock, description, cover_index } = req.body;
     
     try {
-        // 1. Ambil Gambar Lama (URL) dari Hidden Input
+
         let existingGallery = [];
         if (req.body.existing_gallery) {
             existingGallery = Array.isArray(req.body.existing_gallery) 
@@ -105,16 +103,16 @@ router.post("/products/edit", isAdmin, upload.fields([{ name: "gallery", maxCoun
                 : [req.body.existing_gallery];
         }
 
-        // 2. Ambil Gambar Baru (URL Cloudinary)
+
         let newGallery = [];
         if (req.files && req.files["gallery"]) {
             newGallery = req.files["gallery"].map((f) => f.path);
         }
 
-        // 3. Gabung
+
         const finalGallery = [...existingGallery, ...newGallery];
         
-        // 4. Tentukan Cover
+   
         const safeCoverIndex = parseInt(cover_index) || 0;
         const image_url = finalGallery[safeCoverIndex] || finalGallery[0] || "";
 
@@ -130,7 +128,7 @@ router.post("/products/edit", isAdmin, upload.fields([{ name: "gallery", maxCoun
     }
 });
 
-// Delete Product
+
 router.get("/products/delete/:id", isAdmin, async (req, res) => {
   try {
     await db.query("DELETE FROM products WHERE id = $1", [req.params.id]);
@@ -140,7 +138,7 @@ router.get("/products/delete/:id", isAdmin, async (req, res) => {
   }
 });
 
-// Orders
+
 router.get("/orders", isAdmin, async (req, res) => {
   try {
     const result = await db.query(`
@@ -156,7 +154,7 @@ router.get("/orders", isAdmin, async (req, res) => {
   }
 });
 
-// Users
+
 router.get("/users", isAdmin, async (req, res) => {
   try {
     const result = await db.query("SELECT id, full_name, email, role, created_at FROM users ORDER BY created_at DESC");
