@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Dashboard | LuxeSpace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -10,25 +10,21 @@
       rel="stylesheet"
     />
     <style>
-      body {
-        font-family: "Lato", sans-serif;
-      }
-      /* BACKGROUND MEWAH (Dark Gradient) */
-      .luxury-bg {
-        background: radial-gradient(circle at 0% 0%, #1a1a1a 0%, #000000 100%);
-      }
+      body { font-family: "Lato", sans-serif; }
+      .luxury-bg { background: radial-gradient(circle at 0% 0%, #1a1a1a 0%, #000000 100%); }
       .glass-card {
         background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.05);
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
       }
+      .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
     </style>
   </head>
   <body class="luxury-bg text-gray-200 flex min-h-screen">
     <%- include('../partials/admin_sidebar', { page: 'dashboard' }) %>
 
-    <main class="flex-1 ml-72 p-10 relative">
+    <main class="flex-1 ml-0 md:ml-72 p-6 md:p-10 relative pb-28 md:pb-10">
       <div
         class="fixed top-0 left-0 w-[500px] h-[500px] bg-yellow-600/20 rounded-full blur-[120px] pointer-events-none"
       ></div>
@@ -36,166 +32,79 @@
         class="fixed bottom-0 right-0 w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[120px] pointer-events-none"
       ></div>
 
-      <header class="flex justify-between items-center mb-12 relative z-10">
+      <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 md:mb-12 relative z-10 gap-4">
         <div>
-          <h1 class="text-4xl font-serif font-bold text-white mb-2">
+          <h1 class="text-3xl md:text-4xl font-serif font-bold text-white mb-2">
             Control Room
           </h1>
-          <p class="text-gray-400 font-light">
+          <p class="text-gray-400 font-light text-sm">
             Real-time overview of your empire.
           </p>
         </div>
         <a
           href="/"
           target="_blank"
-          class="glass-card px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-yellow-500 hover:bg-yellow-500/10 transition flex items-center gap-2"
+          class="glass-card px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest text-yellow-500 hover:bg-yellow-500/10 transition flex items-center gap-2 self-start md:self-auto"
         >
           Live Website <span class="text-lg">&nearr;</span>
         </a>
       </header>
 
       <div
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 relative z-10"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12 relative z-10"
       >
-        <div
-          class="glass-card p-6 rounded-3xl hover:bg-white/5 transition duration-500 group"
-        >
+        <div class="glass-card p-6 rounded-3xl hover:bg-white/5 transition duration-500 group">
           <div class="flex items-center justify-between mb-4">
-            <h3
-              class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]"
-            >
-              Revenue
-            </h3>
-            <div
-              class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 group-hover:scale-110 transition"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
+            <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">Revenue</h3>
+            <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-400 group-hover:scale-110 transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
             </div>
           </div>
           <div class="text-2xl font-serif font-bold text-white mb-1">
-            IDR <%= new Intl.NumberFormat('id-ID').format(stats.totalRevenue ||
-            0) %>
+            IDR <%= new Intl.NumberFormat('id-ID').format(stats.totalRevenue || 0) %>
           </div>
-          <div class="text-xs text-green-400 font-medium">
-            +12% from last month
-          </div>
+          <div class="text-xs text-green-400 font-medium">+12% from last month</div>
         </div>
 
-        <div
-          class="glass-card p-6 rounded-3xl hover:bg-white/5 transition duration-500 group"
-        >
+        <div class="glass-card p-6 rounded-3xl hover:bg-white/5 transition duration-500 group">
           <div class="flex items-center justify-between mb-4">
-            <h3
-              class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]"
-            >
-              Orders
-            </h3>
-            <div
-              class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                ></path>
+            <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">Orders</h3>
+            <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 group-hover:scale-110 transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
               </svg>
             </div>
           </div>
-          <div class="text-3xl font-serif font-bold text-white mb-1">
-            <%= stats.totalOrders %>
-          </div>
-          <div class="text-xs text-blue-400 font-medium">
-            New orders pending
-          </div>
+          <div class="text-3xl font-serif font-bold text-white mb-1"><%= stats.totalOrders %></div>
+          <div class="text-xs text-blue-400 font-medium">New orders pending</div>
         </div>
 
-        <div
-          class="glass-card p-6 rounded-3xl hover:bg-white/5 transition duration-500 group"
-        >
+        <div class="glass-card p-6 rounded-3xl hover:bg-white/5 transition duration-500 group">
           <div class="flex items-center justify-between mb-4">
-            <h3
-              class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]"
-            >
-              Products
-            </h3>
-            <div
-              class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-400 group-hover:scale-110 transition"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                ></path>
+            <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">Products</h3>
+            <div class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center text-yellow-400 group-hover:scale-110 transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
               </svg>
             </div>
           </div>
-          <div class="text-3xl font-serif font-bold text-white mb-1">
-            <%= stats.totalProducts %>
-          </div>
-          <div class="text-xs text-yellow-400 font-medium">
-            Items in catalog
-          </div>
+          <div class="text-3xl font-serif font-bold text-white mb-1"><%= stats.totalProducts %></div>
+          <div class="text-xs text-yellow-400 font-medium">Items in catalog</div>
         </div>
 
-        <div
-          class="glass-card p-6 rounded-3xl hover:bg-white/5 transition duration-500 group"
-        >
+        <div class="glass-card p-6 rounded-3xl hover:bg-white/5 transition duration-500 group">
           <div class="flex items-center justify-between mb-4">
-            <h3
-              class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]"
-            >
-              Customers
-            </h3>
-            <div
-              class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400 group-hover:scale-110 transition"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-                ></path>
+            <h3 class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">Customers</h3>
+            <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400 group-hover:scale-110 transition">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
               </svg>
             </div>
           </div>
-          <div class="text-3xl font-serif font-bold text-white mb-1">
-            <%= stats.totalUsers %>
-          </div>
-          <div class="text-xs text-purple-400 font-medium">
-            Registered accounts
-          </div>
+          <div class="text-3xl font-serif font-bold text-white mb-1"><%= stats.totalUsers %></div>
+          <div class="text-xs text-purple-400 font-medium">Registered accounts</div>
         </div>
       </div>
     </main>

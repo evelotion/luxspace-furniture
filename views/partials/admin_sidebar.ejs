@@ -1,4 +1,4 @@
-<aside class="w-72 fixed h-full z-50 transition-all duration-300">
+<aside class="hidden md:flex w-72 fixed h-full z-50 transition-all duration-300">
   <div
     class="h-full bg-white/10 backdrop-blur-xl border-r border-white/20 flex flex-col shadow-2xl relative overflow-hidden"
   >
@@ -124,3 +124,46 @@
     </div>
   </div>
 </aside>
+
+<div class="fixed bottom-0 left-0 w-full bg-[#1a1a1a]/90 backdrop-blur-xl border-t border-white/10 z-[60] md:hidden pb-safe transition-all duration-300">
+    <div class="grid grid-cols-5 h-16 items-center">
+        <a href="/admin" class="flex flex-col items-center justify-center w-full h-full <%= page === 'dashboard' ? 'text-yellow-500' : 'text-gray-500' %> hover:text-yellow-400 transition">
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+            </svg>
+            <span class="text-[9px] font-bold tracking-widest uppercase">Home</span>
+        </a>
+
+        <a href="/admin/products" class="flex flex-col items-center justify-center w-full h-full <%= page === 'products' ? 'text-yellow-500' : 'text-gray-500' %> hover:text-yellow-400 transition">
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+            </svg>
+            <span class="text-[9px] font-bold tracking-widest uppercase">Items</span>
+        </a>
+
+        <a href="/admin/orders" class="flex flex-col items-center justify-center w-full h-full <%= page === 'orders' ? 'text-yellow-500' : 'text-gray-500' %> hover:text-yellow-400 transition">
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+            <span class="text-[9px] font-bold tracking-widest uppercase">Orders</span>
+        </a>
+
+        <a href="/admin/users" class="flex flex-col items-center justify-center w-full h-full <%= page === 'users' ? 'text-yellow-500' : 'text-gray-500' %> hover:text-yellow-400 transition">
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+            </svg>
+            <span class="text-[9px] font-bold tracking-widest uppercase">Users</span>
+        </a>
+
+         <a href="/auth/logout" class="flex flex-col items-center justify-center w-full h-full text-red-500 hover:text-red-400 transition">
+            <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            <span class="text-[9px] font-bold tracking-widest uppercase">Exit</span>
+        </a>
+    </div>
+</div>
+
+<style>
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+</style>
