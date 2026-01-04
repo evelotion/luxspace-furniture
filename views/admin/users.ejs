@@ -41,31 +41,55 @@
               <th class="p-6">Name</th>
               <th class="p-6">Email</th>
               <th class="p-6">Role</th>
+              <th class="p-6 text-right">Actions</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-white/5">
-            <% users.forEach(u => { %>
-            <tr class="hover:bg-white/5 transition duration-300">
-              <td class="p-6 text-gray-600 font-mono text-xs">#<%= u.id %></td>
-              <td class="p-6 font-bold text-white flex items-center gap-3">
-                <div
-                  class="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-[10px]"
-                >
-                  <%= u.full_name.charAt(0) %>
-                </div>
-                <%= u.full_name %>
-              </td>
-              <td class="p-6 text-gray-400"><%= u.email %></td>
-              <td class="p-6">
-                <span
-                  class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border <%= u.role === 'admin' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' : 'bg-gray-500/10 text-gray-400 border-gray-500/20' %>"
-                >
-                  <%= u.role %>
-                </span>
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
+  <% users.forEach(u => { %>
+  <tr class="hover:bg-white/5 transition duration-300">
+    <td class="p-6 text-gray-600 font-mono text-xs">#<%= u.id %></td>
+    
+    <td class="p-6 font-bold text-white flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-[10px]">
+        <%= u.full_name.charAt(0) %>
+      </div>
+      <%= u.full_name %>
+    </td>
+
+    <td class="p-6 text-gray-400"><%= u.email %></td>
+
+    <td class="p-6">
+      <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border <%= u.role === 'admin' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' : 'bg-gray-500/10 text-gray-400 border-gray-500/20' %>">
+        <%= u.role %>
+      </span>
+    </td>
+
+    <td class="p-6 text-right">
+      <div class="flex items-center justify-end gap-2">
+        
+        <a 
+          href="/admin/users/toggle-role/<%= u.id %>" 
+          class="px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider transition border 
+          <%= u.role === 'admin' ? 'border-yellow-500/30 text-yellow-500 hover:bg-yellow-500/10' : 'border-blue-500/30 text-blue-400 hover:bg-blue-500/10' %>"
+        >
+          <%= u.role === 'admin' ? 'Demote' : 'Make Admin' %>
+        </a>
+
+        <a 
+          href="/admin/users/delete/<%= u.id %>" 
+          onclick="return confirm('Yakin mau hapus user <%= u.full_name %>?')"
+          class="w-8 h-8 rounded-lg border border-red-500/30 text-red-400 flex items-center justify-center hover:bg-red-500/10 transition"
+          title="Delete User"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+        </a>
+
+      </div>
+    </td>
+
+  </tr>
+  <% }) %>
+</tbody>
         </table>
       </div>
     </main>
