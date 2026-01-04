@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />    
     <title>LuxeSpace | Premium Furniture</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -63,6 +63,12 @@
         background-color: #cbd5e0;
         border-radius: 4px;
       }
+      .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+a, button {
+    -webkit-tap-highlight-color: transparent;
+}
     </style>
   </head>
   <body class="flex flex-col min-h-screen">
@@ -283,10 +289,17 @@
           const data = await res.json();
 
           if (data.success) {
-            const badge = document.getElementById("cart-count");
-            badge.innerText = data.totalItems;
-            if (data.totalItems > 0) badge.classList.remove("scale-0");
-            else badge.classList.add("scale-0");
+    // Update Desktop Badge
+    const badge = document.getElementById("cart-count");
+    badge.innerText = data.totalItems;
+    if (data.totalItems > 0) badge.classList.remove("scale-0");
+    else badge.classList.add("scale-0");
+    const mobileBadge = document.getElementById("mobile-cart-count");
+    if (mobileBadge) {
+        mobileBadge.innerText = data.totalItems;
+        if (data.totalItems > 0) mobileBadge.classList.remove("hidden");
+        else mobileBadge.classList.add("hidden");
+    }
 
             const container = document.getElementById("mini-cart-items");
             const totalEl = document.getElementById("mini-cart-total");

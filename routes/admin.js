@@ -169,9 +169,7 @@ router.get("/users", isAdmin, async (req, res) => {
 router.get("/users/delete/:id", isAdmin, async (req, res) => {
   try {
     const idToDelete = req.params.id;
-    
-    // Safety: Cegah admin menghapus dirinya sendiri saat login
-    // Asumsi req.session.user menyimpan data user yg login
+
     if (req.session.user && req.session.user.id == idToDelete) {
        console.log("⚠️ Admin mencoba menghapus diri sendiri. Dibatalkan.");
        return res.redirect("/admin/users");
@@ -185,14 +183,10 @@ router.get("/users/delete/:id", isAdmin, async (req, res) => {
   }
 });
 
-// 🔥 2. FITUR JADIKAN ADMIN (TOGGLE)
-// Kalau user biasa -> Jadi Admin
-// Kalau admin -> Jadi User biasa (biar bisa demote juga)
 router.get("/users/toggle-role/:id", isAdmin, async (req, res) => {
   try {
     const idToUpdate = req.params.id;
 
-    // Safety: Cegah admin mencopot status admin dirinya sendiri
     if (req.session.user && req.session.user.id == idToUpdate) {
         return res.redirect("/admin/users");
     }
