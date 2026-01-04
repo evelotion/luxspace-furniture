@@ -12,7 +12,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
     <style>
-      /* FIX 1: Paksa background HTML jadi hitam agar overscroll/space bawah footer tidak putih */
+   
       html {
         background-color: #151515;
         height: 100%;
@@ -23,13 +23,17 @@
         color: #1a202c;
         font-family: "Lato", sans-serif;
         overflow-x: hidden;
-        min-height: 100vh; /* Pastikan body minimal setinggi layar */
+        min-height: 100vh;
       }
 
-      h1,
-      h2,
-      h3,
-      .font-serif {
+     
+      @media (max-width: 768px) {
+        body {
+          padding-bottom: 5rem;
+        }
+      }
+
+      h1, h2, h3, .font-serif {
         font-family: "Playfair Display", serif;
       }
 
@@ -63,12 +67,14 @@
         background-color: #cbd5e0;
         border-radius: 4px;
       }
+      
+
       .pb-safe {
-    padding-bottom: env(safe-area-inset-bottom);
-}
-a, button {
-    -webkit-tap-highlight-color: transparent;
-}
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+      a, button {
+        -webkit-tap-highlight-color: transparent;
+      }
     </style>
   </head>
   <body class="flex flex-col min-h-screen">
@@ -90,7 +96,7 @@ a, button {
         </a>
 
         <div
-          class="flex items-center space-x-8 md:space-x-12 text-xs uppercase tracking-[0.15em] font-medium text-gray-900"
+          class="hidden md:flex items-center space-x-8 md:space-x-12 text-xs uppercase tracking-[0.15em] font-medium text-gray-900"
         >
           <a href="/product" class="hidden md:inline hover:text-yellow-600 transition">Collections</a>
 
@@ -289,17 +295,19 @@ a, button {
           const data = await res.json();
 
           if (data.success) {
-    // Update Desktop Badge
-    const badge = document.getElementById("cart-count");
-    badge.innerText = data.totalItems;
-    if (data.totalItems > 0) badge.classList.remove("scale-0");
-    else badge.classList.add("scale-0");
-    const mobileBadge = document.getElementById("mobile-cart-count");
-    if (mobileBadge) {
-        mobileBadge.innerText = data.totalItems;
-        if (data.totalItems > 0) mobileBadge.classList.remove("hidden");
-        else mobileBadge.classList.add("hidden");
-    }
+            // Update Desktop Badge
+            const badge = document.getElementById("cart-count");
+            badge.innerText = data.totalItems;
+            if (data.totalItems > 0) badge.classList.remove("scale-0");
+            else badge.classList.add("scale-0");
+
+            // Update Mobile Badge
+            const mobileBadge = document.getElementById("mobile-cart-count");
+            if (mobileBadge) {
+                mobileBadge.innerText = data.totalItems;
+                if (data.totalItems > 0) mobileBadge.classList.remove("hidden");
+                else mobileBadge.classList.add("hidden");
+            }
 
             const container = document.getElementById("mini-cart-items");
             const totalEl = document.getElementById("mini-cart-total");
@@ -407,6 +415,4 @@ a, button {
       });
     </script>
 
-    <main class="flex-grow relative z-10"></main>
-  </body>
-</html>
+    <main class="flex-grow relative z-10">

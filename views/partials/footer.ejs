@@ -92,46 +92,47 @@
         <button onclick="sendMessage()" class="text-gray-900 hover:text-yellow-600 font-bold text-xs uppercase tracking-widest px-2">Send</button>
     </div>
 </div>
-<div class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-md border-t border-gray-200 z-[60] md:hidden pb-safe">
-    <div class="flex justify-around items-center h-16">
+
+<div class="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-gray-200 z-[60] md:hidden pb-safe transition-all duration-300 shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+    <div class="grid grid-cols-4 h-16 items-center">
         
-        <a href="/" class="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-yellow-600 active:text-yellow-700 transition group">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <a href="/" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-yellow-600 active:text-yellow-700 transition group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1 group-hover:-translate-y-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
             </svg>
-            <span class="text-[10px] font-medium tracking-wide">Home</span>
+            <span class="text-[9px] font-bold tracking-widest uppercase opacity-80">Home</span>
         </a>
 
-        <a href="/#collection" class="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-yellow-600 active:text-yellow-700 transition group">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+        <a href="/#collection" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-yellow-600 active:text-yellow-700 transition group">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1 group-hover:-translate-y-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
-            <span class="text-[10px] font-medium tracking-wide">Catalog</span>
+            <span class="text-[9px] font-bold tracking-widest uppercase opacity-80">Catalog</span>
         </a>
 
-        <a href="/cart" class="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-yellow-600 active:text-yellow-700 transition group relative">
-            <div class="relative">
+        <a href="/cart" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-yellow-600 active:text-yellow-700 transition group relative">
+            <div class="relative group-hover:-translate-y-1 transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
-                <span id="mobile-cart-count" class="absolute -top-1 -right-2 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden border border-white">0</span>
+                <span id="mobile-cart-count" class="absolute -top-1.5 -right-2 bg-yellow-600 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center hidden shadow-sm border border-white">0</span>
             </div>
-            <span class="text-[10px] font-medium tracking-wide">Bag</span>
+            <span class="text-[9px] font-bold tracking-widest uppercase opacity-80">Bag</span>
         </a>
 
         <% if (typeof currentUser !== 'undefined' && currentUser) { %>
-            <a href="/profile" class="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-yellow-600 active:text-yellow-700 transition group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <a href="/profile" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-yellow-600 active:text-yellow-700 transition group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1 group-hover:-translate-y-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                <span class="text-[10px] font-medium tracking-wide">Profile</span>
+                <span class="text-[9px] font-bold tracking-widest uppercase opacity-80">Me</span>
             </a>
         <% } else { %>
-            <a href="/auth/login" class="flex flex-col items-center justify-center w-full h-full text-gray-500 hover:text-yellow-600 active:text-yellow-700 transition group">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <a href="/auth/login" class="flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-yellow-600 active:text-yellow-700 transition group">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1 group-hover:-translate-y-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                 </svg>
-                <span class="text-[10px] font-medium tracking-wide">Login</span>
+                <span class="text-[9px] font-bold tracking-widest uppercase opacity-80">Login</span>
             </a>
         <% } %>
 
@@ -142,14 +143,12 @@
    function toggleChat() {
     const box = document.getElementById("chat-box");
     if (box.classList.contains("hidden")) {
-
+        // Buka
         box.classList.remove("hidden");
         box.classList.add("flex", "animate-fade-in-up");
-        
-
         setTimeout(() => document.getElementById("user-input").focus(), 100);
     } else {
-
+        // Tutup
         box.classList.add("hidden");
         box.classList.remove("flex", "animate-fade-in-up");
     }
@@ -162,7 +161,6 @@
         
         if (!message) return;
         
-
         history.innerHTML += `
             <div class="flex justify-end animate-fade-in">
                 <div class="bg-gray-100 text-gray-800 p-3 rounded-t-2xl rounded-bl-2xl text-sm max-w-[85%] shadow-sm">
@@ -175,7 +173,6 @@
         
         const loadingId = "loading-" + Date.now();
         
-       
         history.innerHTML += `
             <div id="${loadingId}" class="flex justify-start animate-pulse">
                 <div class="bg-gray-900 text-gray-300 p-3 rounded-t-2xl rounded-br-2xl text-xs italic shadow-sm">
@@ -195,7 +192,6 @@
             
             document.getElementById(loadingId).remove();
             
-        
             history.innerHTML += `
                 <div class="flex justify-start animate-fade-in">
                     <div class="bg-gray-900 text-white p-3 rounded-t-2xl rounded-br-2xl text-sm max-w-[85%] shadow-md leading-relaxed">
