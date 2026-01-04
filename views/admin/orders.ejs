@@ -2,19 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Orders | LuxeSpace</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
     <style>
-      body {
-        font-family: "Lato", sans-serif;
-      }
-      .luxury-bg {
-        background: radial-gradient(circle at 0% 0%, #1a1a1a 0%, #000000 100%);
-      }
+      body { font-family: "Lato", sans-serif; }
+      .luxury-bg { background: radial-gradient(circle at 0% 0%, #1a1a1a 0%, #000000 100%); }
       .glass-card {
         background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(20px);
@@ -26,16 +20,14 @@
   <body class="luxury-bg text-gray-300 flex min-h-screen">
     <%- include('../partials/admin_sidebar', { page: 'orders' }) %>
 
-    <main class="flex-1 ml-72 p-10 relative">
-      <h1 class="text-3xl font-serif font-bold text-white mb-8 relative z-10">
+    <main class="flex-1 ml-0 md:ml-72 p-4 md:p-10 relative pb-28 md:pb-10 transition-all duration-300">
+      <h1 class="text-2xl md:text-3xl font-serif font-bold text-white mb-8 relative z-10">
         Transaction History
       </h1>
 
-<div class="glass-card rounded-3xl overflow-x-auto relative z-10">
-        <table class="w-full text-left text-sm">
-          <thead
-            class="bg-white/5 text-gray-400 uppercase font-bold text-[10px] tracking-widest"
-          >
+      <div class="glass-card rounded-3xl overflow-hidden relative z-10 overflow-x-auto">
+        <table class="w-full text-left text-sm whitespace-nowrap">
+          <thead class="bg-white/5 text-gray-400 uppercase font-bold text-[10px] tracking-widest">
             <tr>
               <th class="p-6">ID</th>
               <th class="p-6">Customer</th>
@@ -48,84 +40,34 @@
           <tbody class="divide-y divide-white/5">
             <% orders.forEach(order => { %>
             <tr class="hover:bg-white/5 transition duration-300">
-              <td class="p-6 font-mono text-xs text-gray-600">
-                #<%= order.id %>
-              </td>
+              <td class="p-6 font-mono text-xs text-gray-600">#<%= order.id %></td>
               <td class="p-6">
-                <div class="font-bold text-white">
-                  <%= order.customer_name %>
-                </div>
-                <div class="text-[10px] text-gray-500 mt-1">
-                  <%= new Date(order.created_at).toLocaleDateString() %>
-                </div>
+                <div class="font-bold text-white"><%= order.customer_name %></div>
+                <div class="text-[10px] text-gray-500 mt-1"><%= new Date(order.created_at).toLocaleDateString() %></div>
               </td>
-              <td class="p-6 text-gray-400 max-w-xs truncate">
-                <%= order.items_summary %>
-              </td>
+              <td class="p-6 text-gray-400 max-w-xs truncate"><%= order.items_summary %></td>
               <td class="p-6 font-bold text-yellow-500 font-mono">
-                IDR <%= new
-                Intl.NumberFormat('id-ID').format(order.total_amount) %>
+                IDR <%= new Intl.NumberFormat('id-ID').format(order.total_amount) %>
               </td>
               <td class="p-6">
                 <% if(order.status === 'pending') { %>
-                <span
-                  class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 shadow-[0_0_10px_rgba(234,179,8,0.2)]"
-                  >⏳ Pending</span
-                >
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 shadow-[0_0_10px_rgba(234,179,8,0.2)]">⏳ Pending</span>
                 <% } else if(order.status === 'completed') { %>
-                <span
-                  class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-400 border border-green-500/20 shadow-[0_0_10px_rgba(34,197,94,0.2)]"
-                  >✅ Shipped</span
-                >
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-green-500/10 text-green-400 border border-green-500/20 shadow-[0_0_10px_rgba(34,197,94,0.2)]">✅ Shipped</span>
                 <% } else { %>
-                <span
-                  class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20"
-                  >❌ Cancelled</span
-                >
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-red-500/10 text-red-400 border border-red-500/20">❌ Cancelled</span>
                 <% } %>
               </td>
               <td class="p-6 flex gap-3">
                 <% if(order.status === 'pending') { %>
                 <form action="/admin/process/<%= order.id %>" method="POST">
-                  <button
-                    class="bg-green-600/80 hover:bg-green-500 text-white p-2 rounded-lg transition shadow-lg shadow-green-900/50"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
+                  <button class="bg-green-600/80 hover:bg-green-500 text-white p-2 rounded-lg transition shadow-lg shadow-green-900/50">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                   </button>
                 </form>
-                <form
-                  action="/admin/cancel/<%= order.id %>"
-                  method="POST"
-                  onsubmit="return confirm('Cancel?')"
-                >
-                  <button
-                    class="bg-white/10 hover:bg-red-500/50 text-gray-400 hover:text-white p-2 rounded-lg transition border border-white/5"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
+                <form action="/admin/cancel/<%= order.id %>" method="POST" onsubmit="return confirm('Cancel?')">
+                  <button class="bg-white/10 hover:bg-red-500/50 text-gray-400 hover:text-white p-2 rounded-lg transition border border-white/5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                   </button>
                 </form>
                 <% } else { %>
