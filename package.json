@@ -1,14 +1,23 @@
 {
-  "name": "luxspace",
+  "name": "luxespace-furniture",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Premium AI-Powered Furniture E-Commerce System",
+  "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "ecommerce",
+    "furniture",
+    "ai",
+    "gemini",
+    "nodejs",
+    "express",
+    "postgresql"
+  ],
+  "author": "Indra Dwi Ananda",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "bcryptjs": "^3.0.3",

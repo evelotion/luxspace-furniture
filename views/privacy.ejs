@@ -1,0 +1,35 @@
+<%- include('partials/header') %>
+
+<main class="pt-32 pb-20 bg-[#FDFBF7] min-h-screen">
+    <div class="container mx-auto px-6 max-w-4xl">
+        <h1 class="text-4xl md:text-5xl font-serif text-gray-900 mb-8">Privacy Policy</h1>
+        
+        <div class="bg-white p-8 md:p-12 shadow-sm rounded-xl prose prose-stone max-w-none">
+            <p class="text-sm text-gray-500 mb-6">Last Updated: <%= new Date().toLocaleDateString() %></p>
+
+            <h3>1. Introduction</h3>
+            <p>Welcome to LuxeSpace. We respect your privacy and are committed to protecting your personal data. This privacy policy will inform you as to how we look after your personal data when you visit our website.</p>
+
+            <h3>2. The Data We Collect</h3>
+            <p>We may collect, use, store and transfer different kinds of personal data about you which we have grouped together follows:</p>
+            <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                <li><strong>Identity Data:</strong> includes first name, last name, username or similar identifier.</li>
+                <li><strong>Contact Data:</strong> includes email address and telephone number.</li>
+                <li><strong>Transaction Data:</strong> includes details about payments to and from you and other details of products you have purchased from us.</li>
+            </ul>
+
+            <h3>3. How We Use Your Data</h3>
+            <p>We will only use your personal data when the law allows us to. Most commonly, we will use your personal data in the following circumstances:</p>
+            <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                <li>To register you as a new customer.</li>
+                <li>To process and deliver your order.</li>
+                <li>To manage our relationship with you.</li>
+            </ul>
+
+            <h3>4. Cookies</h3>
+            <p>We use cookies to distinguish you from other users of our website. This helps us to provide you with a good experience when you browse our website and also allows us to improve our site.</p>
+        </div>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

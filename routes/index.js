@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 
-// Homepage
+
 router.get("/", async (req, res) => {
   try {
     const result = await db.query("SELECT * FROM products ORDER BY id ASC");
@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Catalog Page
+
 router.get("/product", async (req, res) => {
   try {
     const { category } = req.query;
@@ -48,31 +48,44 @@ router.get("/product", async (req, res) => {
   }
 });
 
-// 🔥 BAGIAN INI YANG DIPERBAIKI 🔥
+
 router.get("/product/:id", async (req, res) => {
   try {
     const productId = req.params.id;
 
-    // Cukup ambil dari tabel products
-    // Kolom 'gallery' sudah otomatis terambil di sini
+    
+    
     const productRes = await db.query("SELECT * FROM products WHERE id = $1", [
       productId,
     ]);
 
     if (productRes.rows.length === 0) return res.status(404).render("404");
 
-    // HAPUS query ke "product_images" karena tabelnya gak ada
-    // const galleryRes = await db.query("SELECT * FROM product_images..."); <-- INI BIANG KEROKNYA
+    
+    
 
     res.render("product", {
       product: productRes.rows[0],
-      // gallery: galleryRes.rows, // <-- Ini juga dihapus, gak perlu
+      
       currentUser: req.session.user || null,
     });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error loading product page");
   }
+});
+
+
+router.get("/privacy-policy", (req, res) => {
+  res.render("privacy", { currentUser: req.session.user || null });
+});
+
+router.get("/terms", (req, res) => {
+  res.render("terms", { currentUser: req.session.user || null });
+});
+
+router.get("/about", (req, res) => {
+  res.render("about", { currentUser: req.session.user || null });
 });
 
 module.exports = router;
