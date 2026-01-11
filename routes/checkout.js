@@ -8,7 +8,7 @@ router.get("/", ensureAuthenticated, async (req, res) => {
     const userId = req.session.user.id;
 
     const cartQuery = `
-            SELECT ci.*, p.name, p.price, (p.price * ci.quantity) as subtotal
+            SELECT ci.*, p.name, p.price, p.image_url, (p.price * ci.quantity) as subtotal
             FROM cart_items ci
             JOIN products p ON ci.product_id = p.id
             JOIN carts c ON ci.cart_id = c.id
