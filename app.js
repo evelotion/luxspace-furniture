@@ -24,15 +24,6 @@ app.use(bodyParser.json());
 
 app.use(
   session({
-    secret: "rahasia_negara_luxe_space",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 1000 * 60 * 60 * 24 },
-  })
-);
-
-app.use(
-  session({
     store: new pgSession({
       pool: pool,                
       tableName: "session",     
