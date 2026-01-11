@@ -3,18 +3,19 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const dotenv = require("dotenv");
 const session = require("express-session");
+const pgSession = require("connect-pg-simple")(session);
+const pool = require("./config/db");
 const flash = require("connect-flash");
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 🔥🔥🔥 BAGIAN PENTING YANG DIUBAH 🔥🔥🔥
-// 1. Set Folder Views pake process.cwd() (Biar Vercel gak nyasar)
+
 app.set("views", path.join(process.cwd(), "views")); 
 app.set("view engine", "ejs");
 
-// 2. Set Folder Public juga pake process.cwd()
+
 app.use(express.static(path.join(process.cwd(), "public"))); 
 // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
@@ -27,6 +28,23 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
+  })
+);
+
+app.use(
+  session({
+    store: new pgSession({
+      pool: pool,                
+      tableName: "session",     
+      createTableIfMissing: true 
+    }),
+    secret: "rahasia_negara_luxe_space",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,
+    },
   })
 );
 
