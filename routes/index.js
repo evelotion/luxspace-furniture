@@ -19,19 +19,32 @@ router.get("/", async (req, res) => {
 
 router.get("/product", async (req, res) => {
   try {
-    const { category } = req.query;
+    const { category, search } = req.query;
 
-    let query = "SELECT * FROM products";
+    // Base Query
+    let query = "SELECT * FROM products WHERE 1=1";
     let params = [];
+    let paramIndex = 1;
 
+    // Filter by Category
     if (category) {
-      query += " WHERE category = $1";
+      query += ` AND category = $${paramIndex}`;
       params.push(category);
+      paramIndex++;
+    }
+
+    // Filter by Search Keyword (Smart Search: Name OR Description)
+    if (search) {
+      query += ` AND (name ILIKE $${paramIndex} OR description ILIKE $${paramIndex})`;
+      params.push(`%${search}%`); // % biar match sebagian kata (fuzzy)
+      paramIndex++;
     }
 
     query += " ORDER BY id ASC";
 
     const result = await db.query(query, params);
+    
+    // Ambil list kategori untuk filter pills
     const categoriesRes = await db.query(
       "SELECT DISTINCT category FROM products ORDER BY category ASC"
     );
@@ -40,6 +53,7 @@ router.get("/product", async (req, res) => {
       products: result.rows,
       categories: categoriesRes.rows,
       currentCategory: category || "All",
+      currentSearch: search || "", // Kirim keyword balik ke view biar input gak kosong pas reload
       currentUser: req.session.user || null,
     });
   } catch (err) {
