@@ -127,4 +127,39 @@ router.post("/delete/:id", ensureAuthenticated, async (req, res) => {
   }
 });
 
+router.post("/add", ensureAuthenticated, async (req, res) => {
+  const userId = req.session.user.id;
+  const { productId } = req.body; // Perhatikan name di ejs adalah productId
+  const quantity = 1;
+
+  try {
+    // 1. Cari atau Buat Cart
+    let cartRes = await db.query("SELECT id FROM carts WHERE user_id = $1", [userId]);
+    let cartId;
+
+    if (cartRes.rows.length === 0) {
+      const newCart = await db.query("INSERT INTO carts (user_id) VALUES ($1) RETURNING id", [userId]);
+      cartId = newCart.rows[0].id;
+    } else {
+      cartId = cartRes.rows[0].id;
+    }
+
+    // 2. Cek Item, kalau ada update qty, kalau belum insert
+    const itemCheck = await db.query("SELECT id FROM cart_items WHERE cart_id = $1 AND product_id = $2", [cartId, productId]);
+
+    if (itemCheck.rows.length > 0) {
+      await db.query("UPDATE cart_items SET quantity = quantity + 1 WHERE id = $1", [itemCheck.rows[0].id]);
+    } else {
+      await db.query("INSERT INTO cart_items (cart_id, product_id, quantity) VALUES ($1, $2, $3)", [cartId, productId, quantity]);
+    }
+
+    req.flash("success_msg", "Berhasil ditambahkan ke keranjang!");
+    res.redirect("/cart"); // Redirect ke halaman cart setelah add
+  } catch (err) {
+    console.error(err);
+    req.flash("error_msg", "Gagal menambah item.");
+    res.redirect("/product/" + productId);
+  }
+});
+
 module.exports = router;
