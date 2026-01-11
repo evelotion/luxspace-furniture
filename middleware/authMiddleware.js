@@ -3,16 +3,16 @@ const ensureAuthenticated = (req, res, next) => {
     return next();
   }
 
+  // 🔥 UPDATE LOGIC: Cek kalau URL mengandung '/api' atau request JSON
   if (
-    req.originalUrl.startsWith("/api") ||
-    req.headers.accept?.indexOf("json") > -1
+    req.originalUrl.includes("/api") || // Cek kalo ada kata 'api' di mana aja
+    req.headers.accept?.indexOf("json") > -1 ||
+    req.xhr // Cek kalo request dari AJAX/Fetch (biasanya ada header X-Requested-With)
   ) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-        message: "Sesi habis. Silakan refresh dan login ulang.",
-      });
+    return res.status(401).json({
+      success: false,
+      message: "Sesi habis atau Anda belum login.",
+    });
   }
 
   // Kalau akses browser biasa, baru redirect
