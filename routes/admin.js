@@ -47,13 +47,44 @@ router.get("/", isAdmin, async (req, res) => {
 
 router.get("/products", isAdmin, async (req, res) => {
   try {
-    const result = await db.query("SELECT * FROM products ORDER BY id DESC");
-    res.render("admin/products", { products: result.rows });
+    // Base Query
+    let sql = "SELECT * FROM products";
+    let params = [];
+    let conditions = [];
+
+    // 1. Logic Search (Case Insensitive)
+    if (req.query.search) {
+      conditions.push(`name ILIKE $${params.length + 1}`);
+      params.push(`%${req.query.search}%`);
+    }
+
+    // 2. Logic Filter Category
+    if (req.query.category) {
+      conditions.push(`category = $${params.length + 1}`);
+      params.push(req.query.category);
+    }
+
+    // Gabungin kondisi WHERE kalau ada
+    if (conditions.length > 0) {
+      sql += " WHERE " + conditions.join(" AND ");
+    }
+
+    sql += " ORDER BY id DESC";
+
+    const result = await db.query(sql, params);
+    
+    // Render view sambil balikin value search/category biar inputnya gak reset
+    res.render("admin/products", { 
+        products: result.rows,
+        currentSearch: req.query.search || '',
+        currentCategory: req.query.category || ''
+    });
+
   } catch (err) {
+    console.error("Error fetching products:", err);
     res.status(500).send("Server Error");
   }
 });
-
 
 router.post(
   "/products",
