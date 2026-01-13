@@ -26,20 +26,34 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
-
 router.get("/", isAdmin, async (req, res) => {
   try {
-    const products = await db.query("SELECT COUNT(*) FROM products");
-    const orders = await db.query("SELECT COUNT(*) FROM orders");
-    const users = await db.query("SELECT COUNT(*) FROM users");
+    // 1. Hitung Total Produk
+    const productsRes = await db.query("SELECT COUNT(*) FROM products");
+
+    // 2. Hitung Total Order (Semua order masuk)
+    const ordersRes = await db.query("SELECT COUNT(*) FROM orders");
+
+    // 3. Hitung Total User (Bisa difilter role='customer' kalo mau, ini semua user)
+    const usersRes = await db.query("SELECT COUNT(*) FROM users");
+
+    // 4. 🔥 Hitung Revenue (Hanya jumlahkan order yang SUKSES/COMPLETED)
+    // Pake COALESCE(..., 0) biar kalau belum ada order, hasilnya 0 (bukan null)
+    const revenueRes = await db.query(
+      "SELECT COALESCE(SUM(total_amount), 0) as total FROM orders WHERE status = 'completed'"
+    );
+
     res.render("admin/dashboard", {
       stats: {
-        products: products.rows[0].count,
-        orders: orders.rows[0].count,
-        users: users.rows[0].count,
+        // Mapping nama variable harus SAMA PERSIS sama yang dipanggil di dashboard.ejs
+        totalProducts: productsRes.rows[0].count,
+        totalOrders: ordersRes.rows[0].count,
+        totalUsers: usersRes.rows[0].count,
+        totalRevenue: revenueRes.rows[0].total, 
       },
     });
   } catch (err) {
+    console.error("Dashboard Error:", err);
     res.status(500).send("Server Error");
   }
 });
